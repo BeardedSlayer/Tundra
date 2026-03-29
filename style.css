@@ -88,6 +88,18 @@ button:disabled {
   background-color: #5a6268;
 }
 
+.secret-btn {
+  background-color: #6f42c1;
+  border: 2px dashed #b19cd9;
+}
+.secret-btn:hover {
+  background-color: #59339d;
+}
+.secret-btn:disabled {
+  background-color: #555 !important;
+  cursor: wait;
+}
+
 @media (min-width: 768px) {
   .control-panel {
     flex-direction: row;

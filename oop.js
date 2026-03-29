@@ -1,3 +1,22 @@
+function fetchSecretBlueprint() {
+
+    return new Promise(function(resolve, reject) {
+
+        setTimeout(function() {
+
+            const serverData = {
+                modelName: "Су-57 (Стелс)",
+                maxSpeed: 2600,
+                ammo: 200,
+                boostReserve: 100
+            };
+
+            resolve(serverData);
+
+        }, 2000);
+    });
+}
+
 class Warplane {
     constructor(modelName, maxSpeed, ammo, boostReserve) {
         this.name = modelName;
@@ -78,6 +97,31 @@ const btnSu34 = document.getElementById('buildSu34Btn');
 const btnMig31 = document.getElementById('buildMig31Btn');
 const hangar = document.getElementById('hangar');
 const btnAlpha = document.getElementById('alphaStrikeBtn');
+
+const btnSecret = document.getElementById('getSecretPlaneBtn');
+
+btnSecret.addEventListener('click', async function() {
+
+    const originalText = btnSecret.textContent;
+    btnSecret.textContent = "⏳ Связь с сервером (Ожидайте)...";
+    btnSecret.disabled = true;
+
+    try {
+
+        const data = await fetchSecretBlueprint();
+
+        const su57 = new Warplane(data.modelName, data.maxSpeed, data.ammo, data.boostReserve);
+
+        mySquadron.push(su57);
+        createPlaneCard(su57);
+
+    } catch (error) {
+        alert("Генштаб не отвечает: " + error);
+    } finally {
+        btnSecret.textContent = originalText;
+        btnSecret.disabled = false;
+    }
+});
 
 const mySquadron = [];
 

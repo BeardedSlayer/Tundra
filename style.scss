@@ -114,6 +114,19 @@ button {
   }
 }
 
+.secret-btn {
+  background-color: #6f42c1;
+  border: 2px dashed #b19cd9;
+
+  &:hover { background-color: #59339d; }
+
+  // Когда идет загрузка, кнопка станет серой, а курсор превратится в часики
+  &:disabled {
+    background-color: #555 !important;
+    cursor: wait;
+  }
+}
+
 @media (min-width: 768px) {
   .control-panel {
     flex-direction: row;
