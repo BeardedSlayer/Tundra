@@ -73,7 +73,6 @@ class Interceptor extends Warplane {
 }
 
 
-// Находим все кнопки и ангар
 const btnSu33 = document.getElementById('buildSu33Btn');
 const btnSu34 = document.getElementById('buildSu34Btn');
 const btnMig31 = document.getElementById('buildMig31Btn');
@@ -82,21 +81,18 @@ const btnAlpha = document.getElementById('alphaStrikeBtn');
 
 const mySquadron = [];
 
-// УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ОТРИСОВКИ КАРТОЧКИ
 function createPlaneCard(plane) {
     const card = document.createElement('div');
     card.classList.add('plane-card');
 
     let extraStats = '';
-    let extraButtons = ''; // Переменная для уникальных кнопок
+    let extraButtons = '';
 
-    // Если это бомбардировщик, готовим ему статистику и кнопку
     if (plane.bombs !== undefined) {
         extraStats = `<p><strong>Бомбы:</strong> <span class="bomb-val">${plane.bombs}</span> шт.</p>`;
         extraButtons = `<button class="bomb-btn">💣 СБРОС ФАБ</button>`;
     }
 
-    // Вставляем все кнопки разом
     card.innerHTML = `
         <h3>🛩️ ${plane.name}</h3>
         <p><strong>Скорость:</strong> <span class="speed-val">${plane.speed}</span> км/ч</p>
@@ -107,13 +103,11 @@ function createPlaneCard(plane) {
         ${extraButtons} 
     `;
 
-    // Находим элементы
     const shootBtn = card.querySelector('.shoot-btn');
     const ammoDisplay = card.querySelector('.ammo-val');
     const boostBtn = card.querySelector('.boost-btn');
     const speedDisplay = card.querySelector('.speed-val');
 
-    // === НОВАЯ ПРОВЕРКА ДЛЯ ПУШКИ ПРИ ОТРИСОВКЕ ===
     if (plane.ammo <= 0) {
         shootBtn.disabled = true;
         shootBtn.textContent = "БК ПУСТ";
@@ -121,7 +115,6 @@ function createPlaneCard(plane) {
         shootBtn.style.cursor = "not-allowed";
     }
 
-    // === НОВАЯ ПРОВЕРКА ДЛЯ ФОРСАЖА ПРИ ОТРИСОВКЕ ===
     if (plane.boostReserve <= 0) {
         boostBtn.disabled = true;
         boostBtn.textContent = "БАК ПУСТ";
@@ -129,7 +122,6 @@ function createPlaneCard(plane) {
         boostBtn.style.cursor = "not-allowed";
     }
 
-    // Логика стрельбы (уже знакомая)
     shootBtn.addEventListener('click', function() {
         plane.shoot();
         ammoDisplay.textContent = plane.ammo;
@@ -141,13 +133,10 @@ function createPlaneCard(plane) {
         }
     });
 
-    // Логика форсажа
     boostBtn.addEventListener('click', function() {
         plane.afterburner();
-        // Обновляем цифру скорости на экране
         speedDisplay.textContent = plane.speed;
 
-        // Форсаж одноразовый, отключаем кнопку
         if (plane.boostReserve === 0) {
             boostBtn.disabled = true;
             boostBtn.textContent = "БАК ПУСТ";
@@ -158,13 +147,10 @@ function createPlaneCard(plane) {
     });
 
 
-    // Логика бомб (сработает ТОЛЬКО если кнопка существует в HTML)
     if (plane.bombs !== undefined) {
         const bombBtn = card.querySelector('.bomb-btn');
         const bombDisplay = card.querySelector('.bomb-val');
 
-        // === ВОТ ЭТУ ПРОВЕРКУ МЫ ДОБАВЛЯЕМ ===
-        // Она заблокирует кнопку сразу при перерисовке ангара, если бомб уже 0
         if (plane.bombs <= 0) {
             bombBtn.disabled = true;
             bombBtn.textContent = "ЛЮК ПУСТ";
@@ -187,7 +173,6 @@ function createPlaneCard(plane) {
     hangar.appendChild(card);
 }
 
-// Шаг 3: Вешаем слушатели на кнопки. Теперь они супер-короткие!
 btnSu33.addEventListener('click', function() {
     const su33 = new Warplane("Су-33", 2300, 150, 100);
     mySquadron.push(su33);
@@ -207,23 +192,17 @@ btnMig31.addEventListener('click', function() {
 });
 
 btnAlpha.addEventListener('click', function() {
-    // Проверка: если ангар пуст, стрелять некому
     if (mySquadron.length === 0) {
         alert("Командир, ангар пуст! Постройте хотя бы один самолет.");
         return;
     }
 
-    // 1. ЛОГИКА (ООП): Пробегаемся по списку и заставляем всех стрелять
     mySquadron.forEach(function(plane) {
         plane.shoot();
     });
 
-    // 2. ВИЗУАЛ (Рендеринг): Обновляем экран
-    // Сначала жестоко сносим ВЕСЬ HTML внутри ангара
     hangar.innerHTML = '';
 
-    // А затем снова пробегаемся по нашему списку и рисуем карточки заново.
-    // Так как патроны в объектах уже уменьшились, карточки нарисуются с новыми цифрами!
     mySquadron.forEach(function(plane) {
         createPlaneCard(plane);
     });

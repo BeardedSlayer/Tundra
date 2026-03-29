@@ -1,0 +1,131 @@
+$bg-main: #2b2b2b;
+$bg-card: #3c3f41;
+$color-text: white;
+$color-accent: #4da6ff;
+$border-color: #555;
+
+$btn-blue: #007bff;
+$btn-blue-hover: #0056b3;
+$btn-red: #dc3545;
+$btn-red-hover: #c82333;
+$btn-orange: #ff9800;
+$btn-orange-hover: #e68a00;
+$btn-gray: #6c757d;
+$btn-gray-hover: #5a6268;
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: $bg-main;
+  color: $color-text;
+  padding: 15px;
+  margin: 0;
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: $btn-blue;
+  color: $color-text;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: $btn-blue-hover;
+  }
+
+  &:disabled {
+    background-color: $border-color !important;
+    cursor: not-allowed;
+  }
+}
+
+.alpha-btn {
+  background-color: #cc0000;
+  border: 2px solid #ff4d4d;
+  box-shadow: 0 0 10px red;
+
+  &:hover {
+    background-color: #ff1a1a;
+  }
+}
+
+.hangar-container {
+  display: grid;
+  gap: 20px;
+  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.plane-card {
+  background-color: $bg-card;
+  border: 2px solid $border-color;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  h3 {
+    margin-top: 0;
+    color: $color-accent;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .shoot-btn {
+    background-color: $btn-red;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: $btn-red-hover;
+    }
+  }
+
+  .boost-btn {
+    background-color: $btn-orange;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: $btn-orange-hover;
+    }
+  }
+
+  .bomb-btn {
+    background-color: $btn-gray;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: $btn-gray-hover;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .control-panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  button {
+    width: auto;
+    padding: 10px 20px;
+  }
+
+  .alpha-btn {
+    margin-left: auto;
+  }
+}
