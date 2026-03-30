@@ -35,7 +35,7 @@ class Warplane {
     }
 
     afterburner() {
-        if (this.boostReserve === 100) {
+        if (this.boostReserve <= 100) {
             console.log(`Форсаж включен! Скорость ${this.name} увеличена!`)
             this.speed += 300;
             this.boostReserve = 0;
@@ -98,25 +98,41 @@ const btnMig31 = document.getElementById('buildMig31Btn');
 const hangar = document.getElementById('hangar');
 const btnAlpha = document.getElementById('alphaStrikeBtn');
 
+async function fetchSecretBlueprint() {
+    const response = await fetch('https://swapi.dev/api/starships/12/');
+
+    if (!response.ok) {
+        throw new Error(`Ошибка сети: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return {
+        modelName: `Инопланетный ${data.name}`,
+        maxSpeed: parseInt(data.max_atmosphering_speed),
+        ammo: 150,
+        boostReserve: 80
+    };
+}
+
 const btnSecret = document.getElementById('getSecretPlaneBtn');
 
 btnSecret.addEventListener('click', async function() {
 
     const originalText = btnSecret.textContent;
-    btnSecret.textContent = "⏳ Связь с сервером (Ожидайте)...";
+    btnSecret.textContent = "⏳ Связь с космосом (Ожидайте)...";
     btnSecret.disabled = true;
 
     try {
-
         const data = await fetchSecretBlueprint();
 
-        const su57 = new Warplane(data.modelName, data.maxSpeed, data.ammo, data.boostReserve);
+        const alienShip = new Warplane(data.modelName, data.maxSpeed, data.ammo, data.boostReserve);
 
-        mySquadron.push(su57);
-        createPlaneCard(su57);
+        mySquadron.push(alienShip);
+        createPlaneCard(alienShip);
 
     } catch (error) {
-        alert("Генштаб не отвечает: " + error);
+        alert("Связь оборвалась: " + error);
     } finally {
         btnSecret.textContent = originalText;
         btnSecret.disabled = false;
@@ -181,7 +197,7 @@ function createPlaneCard(plane) {
         plane.afterburner();
         speedDisplay.textContent = plane.speed;
 
-        if (plane.boostReserve === 0) {
+        if (plane.boostReserve <= 0) {
             boostBtn.disabled = true;
             boostBtn.textContent = "БАК ПУСТ";
             boostBtn.style.backgroundColor = "#555";
